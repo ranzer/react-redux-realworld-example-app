@@ -12,8 +12,8 @@ pipeline {
     }
     stage("Build") {
         steps {
-          sh("sh build.sh -e staging")
-          sh("sh build.sh -e production")
+          sh("bash $WORKSPACE/build.sh -e staging")
+          sh("bash $WORKSPACE/build.sh -e production")
         }
     }
   }
