@@ -42,9 +42,9 @@ check_args() {
 
 function build() {
   new_env=$1
-  current_api_root=$(sed -nr "s/^const api_root\s+=\s+//pi" agent.js)
+  current_api_root=$(sed -nr "s/^const api_root\s+=\s+//pi" ./src/agent.js)
   new_api_root=$(echo $current_api_root | sed -nr "s/(production|staging)(ready)/$new_env\2/pi")
-  sed -i "s|const API_ROOT.*|const API_ROOT = $new_api_root|g" agent.js
+  sed -i "s|const API_ROOT.*|const API_ROOT = $new_api_root|g" ./src/agent.js
   npm run-script build && mv build $new_env
 }
 
