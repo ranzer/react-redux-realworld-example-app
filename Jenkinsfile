@@ -34,5 +34,12 @@ pipeline {
                 }
             }
         }
+        stage("Deploy staging application to S3 bucket") {
+            steps {
+                withAWS(credentials: "MOP_AWS_CREDENTIALS") {
+                    sh("aws s3 cp staging/ ${APP_S3_BUCKET} --recursive")
+                }
+            }
+        }
     }
 }
