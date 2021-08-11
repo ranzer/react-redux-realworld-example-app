@@ -1,0 +1,42 @@
+pipeline {
+    agent { label "awscli" }
+    environment {
+        PATH = "/usr/local/sbin:/usr/local/bin:$PATH"
+        ARTIFACT_NAME = "${params.ARTIFACT_NAME}"
+        AWS_ACCESS_KEY_ID = "${params.AWS_ACCESS_KEY}"
+        AWS_SECRET_ACCESS_KEY = "${params.AWS_SECRET_KEY}"
+        AWS_DEFAULT_REGION = "us-east-1"
+        ARTIFACTS_S3_BUCKET = "s3://${params.ARTIFACTS_S3_BUCKET}"
+        APP_S3_BUCKET = "s3://${params.APP_S3_BUCKET}"
+    }   
+    stages {
+        stage("Fetch artifact from S3 bucket") {
+            steps {
+                withAWS(credentials: "MOP_AWS_CREDENTIALS") {
+                    sh("aws s3 cp ${ARTIFACTS_S3_BUCKET}/${ARTIFACT_NAME} .")
+                }
+            }
+        }
+        stage("Extract production build from the artifact archive") {
+            steps {
+              sh("tar -xvzf ${ARTIFACT_NAME}")
+            }
+        }
+        stage("Synchronize production build with production S3 bucket") {
+            steps {
+              sh("aws s3 sync production ${APP_S3_BUCKET}")  
+            }
+        }
+    }
+    post {
+        cleanup {
+            deleteDir()
+            dir("${workspace}@tmp") {
+                deleteDir()
+            }
+            dir("${workspace}@script") {
+                deleteDir()
+            }
+        }
+    }
+}
