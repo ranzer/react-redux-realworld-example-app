@@ -2,7 +2,8 @@ pipeline {
     agent { label "nodejs" }
     environment {
         PATH = "/usr/local/sbin:/usr/local/bin:$PATH"
-        ARTIFACT_NAME = "${GIT_BRANCH}".substring("${GIT_BRANCH}".lastIndexOf('/') + 1) + "${BUILD_NUMBER}"
+        GIT_BRANCH_SHORT_NAME = "${GIT_BRANCH}".substring("${GIT_BRANCH}".lastIndexOf('/') + 1)
+        ARTIFACT_NAME = "${GIT_BRANCH_SHORT_NAME}${BUILD_NUMBER}"
     }
     stages {
         stage("Install dependencies") {
