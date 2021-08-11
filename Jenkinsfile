@@ -20,8 +20,6 @@ pipeline {
         stage("Build") {
             steps {
                 dir("${env.WORKSPACE}") {
-                    sh("echo ARTIFACT_NAME: ${ARTIFACT_NAME}")
-                    sh("pwd")
                     sh("bash build.bash -e staging")
                     sh("bash build.bash -e production")
                     sh("tar -cvzf ${ARTIFACT_NAME}.tar staging production")
