@@ -27,5 +27,12 @@ pipeline {
                 }
             }
         }
+        stage("Deploy artifacts to S3 bucket") {
+            steps {
+                withAWS(credentials: "MOP_AWS_CREDENTIALS") {
+                    sh("aws s3 cp ${ARTIFACT_NAME}.tar.gz ${ARTIFACTS_S3_BUCKET}")
+                }
+            }
+        }
     }
 }
