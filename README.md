@@ -69,7 +69,7 @@ The example application is a social blogging site (i.e. a Medium.com clone) call
     - Show basic user info
     - List of articles populated from author's created articles or author's favorited articles
 
-## Build and deploy infrastructure
+## Setup build and deploy infrastructure
 
 For creating build and deploy pipeline Jenkins CI/CD tools is used.
 Files used to define the pipeline and execute build and deploy are:
@@ -77,15 +77,15 @@ Files used to define the pipeline and execute build and deploy are:
 - Jenkinsfile-production (for deploying production app to AWS S3 bucket)
 - build.bash (builds app for staging and production environment)
 
-### Testing build and deploy pipeline locally
+**Testing build and deploy pipeline locally**
 
 In order to test build pipeline on a local machine create build infrastructure
 by running following code:<br/>
-<code>
-cd ./infrastructure/build/<br/>
-docker-compose build<br/>
-docker-compose up -d<br/>
-</code>
+```
+cd ./infrastructure/build/
+docker-compose build
+docker-compose up -d
+```
 Jenkins node for building NodeJS has to be created manually.
 There is SSH private key file remote_key which can be used for authentication
 to the node from Jenkins master server.
@@ -93,7 +93,15 @@ There are 3 mandatory string parameters that has to be defined when creating
 the Jenkins build pipeline:
   - ARTIFACT_NAME - the name of created artifact file containing staging and production build directory
   - ARTIFACTS_S3_BUCKET - the name of the S3 bucket where app artifacts are uploaded
-  - APP_S3_BUCKET - the name of the S3 bucket where production app build is hosted
+  - APP_S3_BUCKET - the name of the S3 bucket where production app is hosted
+
+**Creating AWS infrastructure**
+
+The required AWS infrastructure (CloudFlare distribution and S3 buckets) can be created with Terraform by running following commands:<br/>
+```
+cd ./infrastructure/aws
+terraform apply
+```
 
 <br />
 
