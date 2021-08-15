@@ -102,6 +102,25 @@ The required AWS infrastructure (CloudFlare distribution and S3 buckets) can be 
 cd ./infrastructure/aws
 terraform apply
 ```
+**Building Nginx Docker image with staging and production app**
+
+There are two files, aws_config and aws_credentials, that are used in the Dockerfile but not created in the repo. Structure of these files is identical to the files
+created by the **"aws configure"** command.
+These files has to be created either manually or using the **"aws configure"** command
+prior running the Docker image build command.
+
+To build Nginx image run:
+```
+docker build -t nginx:multistage --build-arg artifact_name=ARTIFACT_FILE_NAME_IN_S3_BUCKET --build-arg aws_bucket_name=NAME_OF_S3_BUCKET_CONTAINING_THE_ARTIFACT .
+```
+To create and run Nginx container execute following command:
+```
+docker run -d -e "RUN_ENV=$ENVIRONMENT" -p 80:80 --name mynginx nginx:multistage
+```
+```
+NOTE:
+The $ENVIRONMENT variable should have either staging or production value.
+```
 
 <br />
 
