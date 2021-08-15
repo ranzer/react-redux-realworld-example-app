@@ -108,7 +108,10 @@ There are two files, aws_config and aws_credentials, that are used in the Docker
 created by the **"aws configure"** command.
 These files has to be created either manually or using the **"aws configure"** command
 prior running the Docker image build command.
-
+```
+NOTE:
+Because the Nginx configuration does not support HTTPS connections yet, the Docker image should be used in test environment not in production.
+```
 To build Nginx image run:
 ```
 docker build -t nginx:multistage --build-arg artifact_name=ARTIFACT_FILE_NAME_IN_S3_BUCKET --build-arg aws_bucket_name=NAME_OF_S3_BUCKET_CONTAINING_THE_ARTIFACT .
